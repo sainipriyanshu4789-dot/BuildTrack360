@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Photos - BuildTrack 360{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-3">Construction Photos</h3>
+
+<div class="card kpi-card p-3 mb-4">
+  <form method="post" enctype="multipart/form-data" action="{{ url_for('photos') }}" class="row g-2">
+    <div class="col-12 col-md-4"><input type="file" name="photo" accept=".png,.jpg,.jpeg,.gif" class="form-control" required></div>
+    <div class="col-12 col-md-3">
+      <select name="project_id" class="form-select">
+        <option value="">Select project (optional)</option>
+        {% for p in projects %}<option value="{{ p['id'] }}">{{ p['name'] }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-3"><input name="caption" class="form-control" placeholder="Caption"></div>
+    <div class="col-12 col-md-2"><button class="btn btn-primary w-100">Upload</button></div>
+  </form>
+</div>
+
+{% if photos %}
+  <!-- Level 3 Task 1: automatic slideshow -->
+  <h5 class="fw-bold">Slideshow</h5>
+  <div class="slideshow card kpi-card p-2 mb-4" id="slideshow">
+    {% for ph in photos %}
+      <img class="slide {% if loop.first %}active{% endif %}"
+           src="{{ url_for('static', filename='uploads/' ~ ph['filename']) }}"
+           alt="{{ ph['caption'] or 'Photo' }}">
+    {% endfor %}
+  </div>
+
+  <!-- Level 3 Task 1: thumbnail gallery, click to enlarge -->
+  <h5 class="fw-bold">Gallery (click a thumbnail to enlarge)</h5>
+  <div class="row g-3">
+    {% for ph in photos %}
+      <div class="col-6 col-md-3 col-lg-2">
+        <img class="thumb" alt="{{ ph['caption'] or 'Photo' }}"
+             src="{{ url_for('static', filename='uploads/' ~ ph['filename']) }}"
+             data-full="{{ url_for('static', filename='uploads/' ~ ph['filename']) }}">
+        <small class="text-muted">{{ ph['caption'] or '' }}</small>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">No photos uploaded yet</p>
+{% endif %}
+
+<!-- Modal that shows the enlarged photo -->
+<div class="modal fade" id="imgModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <img id="modalImg" class="img-fluid" alt="Enlarged photo">
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Materials - BuildTrack 360{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-3">Materials</h3>
+
+<div class="card kpi-card p-3 mb-4">
+  <form method="post" action="{{ url_for('materials') }}" class="row g-2">
+    <div class="col-12 col-md-3"><input name="name" class="form-control" placeholder="Material name" required></div>
+    <div class="col-12 col-md-3"><input name="category" class="form-control" placeholder="Category (e.g. Cement)"></div>
+    <div class="col-6 col-md-2"><input name="in_stock" type="number" class="form-control" placeholder="In stock"></div>
+    <div class="col-6 col-md-2"><input name="reorder_point" type="number" class="form-control" placeholder="Reorder point"></div>
+    <div class="col-12 col-md-2"><button class="btn btn-primary w-100">Add</button></div>
+  </form>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover bg-white rounded">
+    <thead><tr><th>Material</th><th>Category</th><th>In Stock</th><th>Reorder Point</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for m in materials %}
+      <tr class="{{ 'table-danger' if m['in_stock'] <= m['reorder_point'] else '' }}">
+        <td>{{ m['name'] }}</td>
+        <td>{{ m['category'] or '-' }}</td>
+        <td>{{ m['in_stock'] }}</td>
+        <td>{{ m['reorder_point'] }}</td>
+        <td>{{ 'Low stock' if m['in_stock'] <= m['reorder_point'] else 'OK' }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="text-center text-muted">No materials yet</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

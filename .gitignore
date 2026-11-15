@@ -1,0 +1,12 @@
+# Local database and uploaded photos (private data)
+database/buildtrack.db
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Virtual environment (if you create one)
+venv/
+.venv/

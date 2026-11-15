@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Web Developer Internship - Cognifyz Technologies{% endblock %}
+{% block content %}
+
+<!-- Level 3 Task 2: Landing page -->
+
+<!-- Clear headline -->
+<section class="hero text-center mb-5">
+  <h1 class="fw-bold display-5">Web Developer Internship Opportunities at Cognifyz Technologies</h1>
+
+  <!-- Brief introduction -->
+  <p class="lead mt-3">
+    Join our web development internship program and build real projects. This project, BuildTrack 360,
+    is a construction project management website built as part of the program.
+  </p>
+  <p class="mb-0">Duration: 1 month</p>
+
+  <!-- Call-to-action button -->
+  <a href="#apply" class="btn btn-warning btn-lg mt-3">Apply Now</a>
+</section>
+
+<!-- Highlights: benefits of the internship -->
+<h4 class="fw-bold mb-3">Highlights</h4>
+<div class="row g-4 mb-5">
+  <div class="col-12 col-md-4">
+    <div class="card kpi-card h-100">
+      <img src="https://picsum.photos/seed/buildtrack1/600/300" class="card-img-top" alt="Real-world project">
+      <div class="card-body">
+        <h5 class="fw-bold">Real-world experience</h5>
+        <p class="text-muted mb-0">Work on a project that looks and behaves like a real business application.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card kpi-card h-100">
+      <img src="https://picsum.photos/seed/buildtrack2/600/300" class="card-img-top" alt="Mentorship">
+      <div class="card-body">
+        <h5 class="fw-bold">Mentorship</h5>
+        <p class="text-muted mb-0">Get guidance from experienced mentors at every step of your tasks.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card kpi-card h-100">
+      <img src="https://picsum.photos/seed/buildtrack3/600/300" class="card-img-top" alt="Portfolio">
+      <div class="card-body">
+        <h5 class="fw-bold">Portfolio building</h5>
+        <p class="text-muted mb-0">Finish the tasks and add the work to your portfolio and LinkedIn profile.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Qualifications: desired skills and technologies -->
+<div class="card kpi-card p-4 mb-5">
+  <h4 class="fw-bold">Qualifications</h4>
+  <ul class="mb-0">
+    <li>HTML5 and CSS3</li>
+    <li>JavaScript basics</li>
+    <li>Bootstrap 5 and responsive design</li>
+    <li>Python and Flask (backend)</li>
+    <li>SQLite (database)</li>
+  </ul>
+</div>
+
+<!-- Apply section (target of the Apply Now button) -->
+<section id="apply" class="card kpi-card p-4 mb-5 text-center">
+  <h4 class="fw-bold">Ready to start?</h4>
+  <p class="text-muted">Explore the BuildTrack 360 dashboard to see the work in action.</p>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Open Dashboard</a>
+</section>
+
+<!-- Contact information footer -->
+<footer class="text-center text-muted py-3 border-top">
+  <p class="mb-1">Contact: sainipriyanshu4789@gmail.com  | +91-9639833296 </p>
+  <small>&copy; 2026 BuildTrack 360</small>
+</footer>
+{% endblock %}

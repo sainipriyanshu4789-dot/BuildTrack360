@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - BuildTrack 360{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-3">Dashboard</h3>
+
+<!-- Level 2 Task 1: Bootstrap grid with summary cards -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl-3">
+    <div class="card kpi-card p-3"><small class="text-muted">Total Budget</small>
+      <div class="kpi-value">₹{{ '%.0f'|format(totals['budget']) }}</div></div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="card kpi-card p-3"><small class="text-muted">Total Spent</small>
+      <div class="kpi-value">₹{{ '%.0f'|format(totals['spent']) }}</div></div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="card kpi-card p-3"><small class="text-muted">Workers</small>
+      <div class="kpi-value">{{ worker_count }}</div></div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="card kpi-card p-3"><small class="text-muted">Overdue Projects</small>
+      <div class="kpi-value text-danger">{{ overdue }}</div>
+      <small class="text-danger">Low stock items: {{ low_stock }}</small></div>
+  </div>
+</div>
+
+<div class="card kpi-card p-3 mb-4">
+  <h5 class="fw-bold">Projects</h5>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Name</th><th>Status</th><th>Progress</th><th>Budget</th><th>Spent</th><th>Deadline</th></tr></thead>
+      <tbody>
+      {% for p in projects %}
+        <tr>
+          <td>{{ p['name'] }}</td>
+          <td><span class="badge text-bg-secondary">{{ p['status'] }}</span></td>
+          <td style="min-width:120px"><div class="progress"><div class="progress-bar" style="width: {{ p['progress'] }}%">{{ p['progress'] }}%</div></div></td>
+          <td>₹{{ p['budget'] }}</td>
+          <td>₹{{ p['spent'] }}</td>
+          <td>{{ p['deadline'] or '-' }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="text-center text-muted">No projects yet. Go to the Projects page to add one.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card kpi-card p-3">
+  <h5 class="fw-bold">Budget vs Spent</h5>
+  <canvas id="budgetChart"></canvas>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js draws the budget chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  new Chart(document.getElementById('budgetChart'), {
+    type: 'bar',
+    data: {
+      labels: {{ chart_labels|tojson }},
+      datasets: [
+        { label: 'Budget', data: {{ chart_budget|tojson }}, backgroundColor: '#1e3a8a' },
+        { label: 'Spent', data: {{ chart_spent|tojson }}, backgroundColor: '#f97316' }
+      ]
+    }
+  });
+</script>
+{% endblock %}

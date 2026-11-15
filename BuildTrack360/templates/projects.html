@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Projects - BuildTrack 360{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-3">Projects</h3>
+
+<div class="card kpi-card p-3 mb-4">
+  <form method="post" action="{{ url_for('projects') }}" class="row g-2">
+    <div class="col-12 col-md-3"><input name="name" class="form-control" placeholder="Project name" required></div>
+    <div class="col-6 col-md-2"><input name="location" class="form-control" placeholder="Location"></div>
+    <div class="col-6 col-md-2"><input name="budget" type="number" step="0.01" class="form-control" placeholder="Budget ₹"></div>
+    <div class="col-6 col-md-1"><input name="progress" type="number" min="0" max="100" class="form-control" placeholder="%"></div>
+    <div class="col-6 col-md-2">
+      <select name="status" class="form-select">
+        <option>Planning</option><option>Active</option><option>Delayed</option><option>Completed</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-2"><input name="deadline" type="date" class="form-control"></div>
+    <div class="col-12"><button class="btn btn-primary">Add Project</button></div>
+  </form>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover bg-white rounded">
+    <thead><tr><th>Name</th><th>Location</th><th>Budget</th><th>Progress</th><th>Status</th><th>Deadline</th><th></th></tr></thead>
+    <tbody>
+    {% for p in projects %}
+      <tr>
+        <td>{{ p['name'] }}</td>
+        <td>{{ p['location'] or '-' }}</td>
+        <td>₹{{ p['budget'] }}</td>
+        <td style="min-width:120px"><div class="progress"><div class="progress-bar" style="width: {{ p['progress'] }}%">{{ p['progress'] }}%</div></div></td>
+        <td>{{ p['status'] }}</td>
+        <td>{{ p['deadline'] or '-' }}</td>
+        <td>
+          <form method="post" action="{{ url_for('delete_project', pid=p['id']) }}">
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="text-center text-muted">No projects yet</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

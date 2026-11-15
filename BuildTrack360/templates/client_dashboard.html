@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Client Dashboard - BuildTrack 360{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-1">Client Dashboard</h3>
+<p class="text-muted mb-4">Welcome, {{ user['name'] }}. Post a work request or search for workers.</p>
+
+<div class="row g-4">
+  <div class="col-12 col-lg-5">
+    <!-- Post a work request -->
+    <div class="card kpi-card p-4 mb-4">
+      <h5 class="fw-bold">Post a work request</h5>
+      <form method="post" action="{{ url_for('new_request') }}" class="row g-2">
+        <div class="col-12"><input name="title" class="form-control" placeholder="Work title (e.g. Fix ceiling fan)" required></div>
+        <div class="col-12"><input name="skill_needed" class="form-control" placeholder="Skill needed (e.g. Electrician)"></div>
+        <div class="col-12"><input name="location" class="form-control" placeholder="Location / area"></div>
+        <div class="col-6"><input name="budget" type="number" step="0.01" class="form-control" placeholder="Budget ₹"></div>
+        <div class="col-6"><input name="deadline" type="date" class="form-control"></div>
+        <div class="col-12"><button class="btn btn-primary">Post request</button></div>
+      </form>
+    </div>
+
+    <!-- Search workers -->
+    <div class="card kpi-card p-4">
+      <h5 class="fw-bold">Find workers</h5>
+      <form method="get" action="{{ url_for('client_dashboard') }}" class="row g-2">
+        <div class="col-12"><input name="skill" class="form-control" placeholder="Skill (e.g. Plumber)" value="{{ request.args.get('skill', '') }}"></div>
+        <div class="col-12"><input name="area" class="form-control" placeholder="Area" value="{{ request.args.get('area', '') }}"></div>
+        <div class="col-12"><button class="btn btn-outline-primary">Search available workers</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-7">
+    <!-- Search results (shown only after a search) -->
+    {% if workers is not none %}
+      <div class="card kpi-card p-4 mb-4">
+        <h5 class="fw-bold">Available workers</h5>
+        {% for w in workers %}
+          <div class="border rounded p-3 mb-2 d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ w['name'] }}</strong> - {{ w['skill'] or '-' }}<br>
+              <small class="text-muted">{{ w['address'] or '-' }} | ₹{{ w['daily_wage'] }}/day | {{ w['phone'] or 'no phone' }}</small>
+            </div>
+            <!-- Dummy call button: real calling will be added in a future version -->
+            <button type="button" class="btn btn-sm btn-outline-success call-btn" data-name="{{ w['name'] }}">
+              <i class="bi bi-telephone"></i> Call
+            </button>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No available workers match your search.</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- My work requests -->
+    <div class="card kpi-card p-4">
+      <h5 class="fw-bold">My work requests</h5>
+      {% for r in requests %}
+        <div class="border rounded p-3 mb-2 d-flex justify-content-between align-items-start">
+          <div>
+            <strong>{{ r['title'] }}</strong>
+            <span class="badge {{ 'text-bg-success' if r['status'] == 'Open' else 'text-bg-secondary' }}">{{ r['status'] }}</span><br>
+            <small class="text-muted">
+              Skill: {{ r['skill_needed'] or '-' }} | Location: {{ r['location'] or '-' }} |
+              Budget: ₹{{ r['budget'] }} | Deadline: {{ r['deadline'] or '-' }}
+            </small>
+          </div>
+          {% if r['status'] == 'Open' %}
+            <form method="post" action="{{ url_for('close_request', rid=r['id']) }}">
+              <button class="btn btn-sm btn-outline-danger">Close</button>
+            </form>
+          {% endif %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">You have not posted any requests yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
