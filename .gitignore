@@ -10,3 +10,6 @@ __pycache__/
 # Virtual environment (if you create one)
 venv/
 .venv/
+**/database/buildtrack.db
+**/static/uploads/*
+!**/static/uploads/.gitkeep
